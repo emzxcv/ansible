@@ -1,12 +1,4 @@
 # Project: Team37 ClusterCloud2
-# Repository: https://github.com/ssaraswati/ClusterCloud2
-# City: Melbourne
-# Team Members:
-#     - jchee@student.unimelb.edu.au, Jone Chee, 634350
-#     - phamtq@student.unimelb.edu.au, Tuyen Quang Pham, 381450
-#     - eha1@student.unimelb.edu.au,  Emily Ha, 747184
-#     - s.saraswati@student.unimelb.edu.au, Shyam Saraswati, 717418
-#     - h.yeh1@student.unimelb.edu.au, Hao Yu Yeh, 782692
 
 ---
 - name: Build an image with the command module
@@ -20,7 +12,7 @@
     - name: build the image
       command: docker build -t forwardsearch:ex1 /tmp/tweetscrape
       become: true
-      
+
     - name: Create a forward search container
       docker_container:
         name: forwardsearch
@@ -30,12 +22,12 @@
     - name: build the image
       command: docker build -t backsearch:ex1 /tmp/tweetscrape
       become: true
-      
+
     - name: Create a backward search container
       docker_container:
         name: backsearch
         image: backsearch:ex1
-        env: 
+        env:
             SEARCH_FORWARD=False
       become: true
 
