@@ -1,0 +1,28 @@
+# Project: Team37 ClusterCloud2
+# Repository: https://github.com/ssaraswati/ClusterCloud2
+# City: Melbourne
+# Team Members:
+#     - jchee@student.unimelb.edu.au, Jone Chee, 634350
+#     - phamtq@student.unimelb.edu.au, Tuyen Quang Pham, 381450
+#     - eha1@student.unimelb.edu.au,  Emily Ha, 747184
+#     - s.saraswati@student.unimelb.edu.au, Shyam Saraswati, 717418
+#     - h.yeh1@student.unimelb.edu.au, Hao Yu Yeh, 782692
+
+---
+- name: Build an image with the command module
+  hosts: backfill
+  roles:
+     - { role: angstwad.docker_ubuntu, sudo: yes }
+  tasks:
+    - name: upload the site directory to the docker host
+      synchronize: src=../tweetscrape dest=/tmp
+
+    - name: build the image
+      command: docker build -f /tmp/tweetscrape/Dockerfile.backfill -t backfill:ex1  /tmp/tweetscrape
+      become: true
+
+    - name: Create a backfill search container
+      docker_container:
+        name: backfill
+        image: backfill:ex1
+      become: true

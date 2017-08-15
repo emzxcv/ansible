@@ -1,0 +1,22 @@
+---
+- name: Build an image with the command module
+  hosts: streams
+  roles:
+     - { role: angstwad.docker_ubuntu, sudo: yes }
+  tasks:
+    - name: upload the site directory to the docker host
+      synchronize: src=../tweetscrape dest=/tmp
+
+    - name: build the image
+      command: docker build -t forwardsearch:ex2 /tmp/tweetscrape
+      become: true
+
+    - name: build the image
+      command: docker build -f /tmp/tweetscrape/Dockerfile.stream -t stream:ex1  /tmp/tweetscrape
+      become: true
+
+    - name: Create a streams search container
+      docker_container:
+        name: streamsMelbourne
+        image: stream:ex1
+      become: true

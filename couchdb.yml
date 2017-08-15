@@ -1,0 +1,52 @@
+# Project: Team37 ClusterCloud2
+# Repository: https://github.com/ssaraswati/ClusterCloud2
+# City: Melbourne
+# Team Members:
+#     - jchee@student.unimelb.edu.au, Jone Chee, 634350
+#     - phamtq@student.unimelb.edu.au, Tuyen Quang Pham, 381450
+#     - eha1@student.unimelb.edu.au,  Emily Ha, 747184
+#     - s.saraswati@student.unimelb.edu.au, Shyam Saraswati, 717418
+#     - h.yeh1@student.unimelb.edu.au, Hao Yu Yeh, 782692
+
+---
+- name: Setup Couchdb instance
+  hosts: couchdb
+  roles:
+     - { role: angstwad.docker_ubuntu, sudo: yes }
+  tasks:
+
+  - name: Creates couchdb data directory
+    file: path=/mnt/couchdb state=directory
+    become: true
+
+  - name: Mount data volume
+    become: true
+    mount:
+      path: /mnt/couchdb
+      src: /dev/vdb
+      fstype: ext4
+      state: mounted
+
+  - name: Create couchdb
+    docker_container:
+      name: Couchdb
+      image: klaemo/couchdb:latest
+      ports:
+      - "5984:5984"
+      volumes:
+      - /mnt/couchdb:/opt/couchdb/data
+    become: true
+
+
+  - iptables:
+      table: nat
+      chain: PREROUTING
+      in_interface: eth0
+      protocol: tcp
+      match: tcp
+      destination_port: 80
+      jump: REDIRECT
+      to_ports: 5984
+      comment: Redirect web traffic to run CouchDB on port 80
+    become: yes
+

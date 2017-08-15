@@ -1,0 +1,14 @@
+[couchdb]
+130.56.253.220 ansible_ssh_user=ubuntu
+
+[tweeters]
+130.56.253.219 ansible_ssh_user=ubuntu
+130.56.253.215 ansible_ssh_user=ubuntu
+130.56.253.217 ansible_ssh_user=ubuntu
+
+[searcher]
+130.56.253.219 ansible_ssh_user=ubuntu
+[backfill]
+130.56.253.215 ansible_ssh_user=ubuntu
+[streams]
+130.56.253.217 ansible_ssh_user=ubuntu
